@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,17 +8,17 @@ import { AuthService } from '../auth.service';
 })
 export class MenuComponent implements OnInit {
 
-  constructor(private auth: AuthService) { }
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
   }
 
   isLoggedIn() {
-    return this.auth.isSessionOpen();
+    return this.api.isSessionOpen();
   }
 
   logout(): void{
-    this.auth.removeToken();
+    this.api.removeToken();
   }
 
 }
