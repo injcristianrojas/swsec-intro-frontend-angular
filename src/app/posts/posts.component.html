@@ -1,1 +1,13 @@
-<p>posts works!</p>
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="mensaje" size="50" required >
+  <input type="submit" value="Postear">
+</form>
+
+<table style="text-align: left;" *ngIf="posts">
+  <th id="msgs">Mensajes</th>
+  <tr *ngFor="let post of posts">
+    <td>
+      <div class="name" [innerHTML]="post.message"></div>
+    </td>
+  </tr>
+</table>
