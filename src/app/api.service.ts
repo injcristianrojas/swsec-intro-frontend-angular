@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  expiration_time: number | undefined;
+  expiration_time?: number;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {  }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post(
@@ -22,6 +23,8 @@ export class ApiService {
     const token = response.token;
     if (token) {
       localStorage.setItem('token', token);
+      const tokenpayload = jwtDecode(token);
+      this.expiration_time = tokenpayload.exp;
     } else {
       console.error('Token not found in response.');
     }
@@ -47,9 +50,13 @@ export class ApiService {
   }
 
   isSessionOpen(): boolean {
-    const current_time = Date.now() / 1000
-    /* if (this.expiration_time < current_time)
-      this.removeToken(); */
+    const token: string | null = this.getToken();
+    if (token !== null) {
+      let tknexpdate: number | undefined = jwtDecode(token).exp
+      if (tknexpdate !== undefined)
+        if (Date.now() >= tknexpdate * 1000)
+          this.removeToken();
+    }
     return this.getToken() !== null;
   }
 
