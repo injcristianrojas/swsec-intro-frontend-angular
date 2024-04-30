@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
+const URI: string = 'http://127.0.0.1:9000/api/v2';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +16,7 @@ export class ApiService {
 
   login(username: string, password: string): Observable<any> {
     return this.http.post(
-      'http://127.0.0.1:9000/api/v2/login',
+      URI + '/login',
       { 'username': username, 'password': password }
     );
   }
@@ -31,12 +33,12 @@ export class ApiService {
   }
 
   getPosts() {
-    return this.http.get('http://127.0.0.1:9000/api/v2/messages', { headers: this.getBearerHeaders() });
+    return this.http.get(URI + '/messages', { headers: this.getBearerHeaders() });
   }
 
   insertPost(message: string) {
     return this.http.post(
-      'http://127.0.0.1:9000/api/v2/messages/add',
+      URI + '/messages/add',
       { 'message': message },
       { headers: this.getBearerHeaders() }
     )
