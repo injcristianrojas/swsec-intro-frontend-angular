@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
@@ -10,12 +10,12 @@ export class ApiService {
 
   expiration_time?: number;
 
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post(
       'http://127.0.0.1:9000/api/v2/login',
-      {'username': username, 'password': password}
+      { 'username': username, 'password': password }
     );
   }
 
@@ -29,20 +29,25 @@ export class ApiService {
       console.error('Token not found in response.');
     }
   }
-  
+
   getPosts() {
-    return this.http.get('http://127.0.0.1:9000/api/v1/messages');
+    return this.http.get('http://127.0.0.1:9000/api/v2/messages', { headers: this.getBearerHeaders() });
   }
 
   insertPost(message: string) {
     return this.http.post(
-      'http://127.0.0.1:9000/api/v1/messages/add',
-      {'message': message}
+      'http://127.0.0.1:9000/api/v2/messages/add',
+      { 'message': message },
+      { headers: this.getBearerHeaders() }
     )
   }
 
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  getBearerHeaders() {
+    return new HttpHeaders({ 'Authorization': 'Bearer ' + this.getToken() });
   }
 
   removeToken() {
