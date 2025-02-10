@@ -47,3 +47,6 @@ Thumbs.db
 # Other
 .scannerwork/
 dependency-check*
+
+# Own
+TORPEDO.md
